@@ -55,8 +55,10 @@ async fn handle_socket(mut socket: WebSocket) {
                 _ => {}
             }
         } else {
-            println!("Error receiving message: {:?}", msg.err());
-            return;
+            let error = msg.err().unwrap();
+            println!("Error receiving message: {:?}", error);
+            send_close_message(socket, 1011, &format!("Error occured: {}", error)).await;
+            break;
         }
     }
 }
